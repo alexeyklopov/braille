@@ -7,6 +7,7 @@ int posInside[n] = {85, 100, 116, 82, 112, 98};  // "inside" positions
 int steps[n] = {stp, 2*stp, -stp, -stp, -2*stp, stp};  // movement from "inside" positions
 String lastBuf = "000000";
 //numver of dot = index in array + 1
+unsigned long timing;
 
 const int xIn = A1; //порт к которому подключен VRx
 const int yIn = A0; //порт к которому подключен VRy
@@ -22,14 +23,14 @@ int prev = '0'; //предыдущее состояние джойстика
 void setInside(int srvNum) {
   srv[srvNum].attach(srvPins[srvNum]);
   srv[srvNum].write(posInside[srvNum]);
-  delay(250);
+  delay(10);
   srv[srvNum].detach();
 }
 
 void setOutside(int srvNum) {
   srv[srvNum].attach(srvPins[srvNum]);
   srv[srvNum].write(posInside[srvNum] + steps[srvNum]);
-  delay(250);
+  delay(10);
   srv[srvNum].detach();
 }
 
@@ -40,17 +41,20 @@ void setAllInside() {
 }
 
 void printString(String buf)
-{                     
-  int i;
-  for(i=0; i<6; i++)
-  {
-      if(buf.substring(i, i+1) == "1" && lastBuf.substring(i, i+1) == "0")
-        setOutside(i);
-      if(buf.substring(i, i+1) == "0" && lastBuf.substring(i, i+1) == "1")
-        setInside(i);
+{
+//  Serial.println(timing);
+//  Serial.println(millis());
+  if (millis() - timing > 1000) {
+    timing = millis();
+    int i;
+    for (i = 0; i < 6; i++) {
+        if(buf.substring(i, i+1) == "1" && lastBuf.substring(i, i+1) == "0")
+          setOutside(i);
+        if(buf.substring(i, i+1) == "0" && lastBuf.substring(i, i+1) == "1")
+          setInside(i);
+    }
+    lastBuf = buf;
   }
-  lastBuf = buf;
-  delay(1000);
 }
 
 void printText()
@@ -123,6 +127,6 @@ void loop()
   if(Serial.available())
   {
     printText();
-    joystick(); 
+    // joystick(); 
   }
 }
