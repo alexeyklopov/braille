@@ -2,9 +2,8 @@
 
 const int n = 6;
 const int srvPins[n] = {3/*1*/, 10/*2*/, 7/*3*/, 12/*4*/, 5/*5*/, 8/*6*/};  // servo pins
-const int stp = 30;
-int posInside[n] = {85, 100, 116, 82, 112, 98};  // "inside" positions
-int steps[n] = {stp, 2*stp, -stp, -stp, -2*stp, stp};  // movement from "inside" positions
+int posInside[n] = {85, 81, 138, 81, 126, 72};  // "inside" positions
+int steps[n] = {33, 60, -39, -28, -55, 48};  // movement from "inside" positions
 String lastBuf = "000000";
 //number of dot = index in array + 1
 
